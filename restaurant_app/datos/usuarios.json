@@ -1,0 +1,21 @@
+[
+    {
+        "identificador": "U001",
+        "nombre": "Administrador",
+        "usuario": "admin",
+        "contraseña": "1234"
+    },
+    {
+        "identificador": "U002",
+        "nombre": "Cajero Dia",
+        "usuario": "caja1",
+        "contraseña": "abcd"
+    },
+    {
+        "identificador": "U003",
+        "nombre": "Cajero Noche",
+        "usuario": "caja2",
+        "contraseña": "abcd"
+    }
+    
+]

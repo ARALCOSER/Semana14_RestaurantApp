@@ -1,0 +1,38 @@
+[
+    {
+        "codigo": "001",
+        "nombre": "Hamburguesa",
+        "categoria": "plato fuerte",
+        "precio": 4.0
+    },
+    {
+        "codigo": "002",
+        "nombre": "Coca Cola",
+        "categoria": "gaseosa",
+        "precio": 2.0
+    },
+    {
+        "codigo": "003",
+        "nombre": "Sopa Marinera",
+        "categoria": "sopa",
+        "precio": 5.0
+    },
+    {
+        "codigo": "004",
+        "nombre": "jugo de mora",
+        "categoria": "jugo natural",
+        "precio": 2.0
+    },
+    {
+        "codigo": "005",
+        "nombre": "Encebollado",
+        "categoria": "Sopa",
+        "precio": 6.0
+    },
+    {
+        "codigo": "006",
+        "nombre": "Te Helado",
+        "categoria": "jugo",
+        "precio": 3.5
+    }
+]
