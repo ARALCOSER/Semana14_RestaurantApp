@@ -138,7 +138,7 @@ class MainView(tk.Frame):
             text="RESTAURANTE",
             bg=self.color_encabezado,
             fg="#ffffff",
-            font=("Arial", 17, "bold"),
+            font=("Arial", 16, "bold"),
         ).pack(anchor="w", pady=(0, 8))
 
         tk.Label(
