@@ -1,5 +1,6 @@
 import tkinter as tk
 from pathlib import Path
+from tkinter import font as tkfont
 from tkinter import messagebox, ttk
 
 
@@ -287,6 +288,11 @@ class MainView(tk.Frame):
                 tk.END,
                 values=(usuario.identificador, usuario.nombre, usuario.usuario),
             )
+        self.ajustar_columnas(
+            self.tabla_usuarios,
+            ("identificador", "nombre", "usuario"),
+            ("Identificador", "Nombre", "Usuario"),
+        )
         self.actualizar_barra_estado()
 
     # -------------------------------------------------------------------
@@ -417,6 +423,11 @@ class MainView(tk.Frame):
                 tk.END,
                 values=(producto.codigo, producto.nombre, producto.categoria, f"${producto.precio:.2f}"),
             )
+        self.ajustar_columnas(
+            self.tabla_productos,
+            ("codigo", "nombre", "categoria", "precio"),
+            ("Codigo", "Nombre", "Categoria", "Precio"),
+        )
         self.actualizar_barra_estado()
 
     # -------------------------------------------------------------------
@@ -466,16 +477,64 @@ class MainView(tk.Frame):
         frame_tabla.pack(fill="both", expand=True)
 
         tabla = ttk.Treeview(frame_tabla, columns=columnas, show="headings", height=12)
-        barra = ttk.Scrollbar(frame_tabla, orient="vertical", command=tabla.yview)
-        tabla.configure(yscrollcommand=barra.set)
+        barra_v = ttk.Scrollbar(frame_tabla, orient="vertical", command=tabla.yview)
+        tabla.configure(yscrollcommand=barra_v.set)
 
         for columna, encabezado in zip(columnas, encabezados):
             tabla.heading(columna, text=encabezado)
-            tabla.column(columna, width=150, anchor="w")
+            # stretch=False: evita que Tkinter reparta el espacio sobrante
+            # entre columnas e ignore el ancho calculado dinamicamente.
+            # ajustar_columnas() se encarga de repartir ese espacio.
+            tabla.column(columna, width=150, anchor="w", stretch=False)
 
         tabla.pack(side="left", fill="both", expand=True)
-        barra.pack(side="right", fill="y")
+        barra_v.pack(side="right", fill="y")
         return tabla
+
+    def ajustar_columnas(self, tabla, columnas, encabezados):
+        fuente_encabezado = tkfont.nametofont("TkHeadingFont") if "TkHeadingFont" in tkfont.names() else tkfont.nametofont("TkDefaultFont")
+        fuente_celda = tkfont.nametofont("TkDefaultFont")
+
+        # Fuerza a Tkinter a calcular la geometria real antes de medir,
+        # de lo contrario winfo_width() puede devolver un valor viejo o 1.
+        tabla.update_idletasks()
+        ancho_total_disponible = tabla.winfo_width()
+        anchos = []
+
+        for columna, encabezado in zip(columnas, encabezados):
+            ancho_max = fuente_encabezado.measure(encabezado)
+            for item in tabla.get_children():
+                valor = str(tabla.set(item, columna))
+                ancho_max = max(ancho_max, fuente_celda.measure(valor))
+            anchos.append(ancho_max + 24)
+
+        ancho_calculado = sum(anchos)
+
+        if ancho_total_disponible > 1 and ancho_calculado > ancho_total_disponible:
+            # El contenido no entra en el espacio actual. Como no hay
+            # scroll horizontal, se agranda la ventana en vez de recortar
+            # texto, respetando el ancho de pantalla disponible.
+            self.agrandar_ventana_si_hace_falta(ancho_calculado - ancho_total_disponible)
+        elif ancho_total_disponible > 1 and ancho_calculado < ancho_total_disponible:
+            # Sobra espacio: se reparte proporcionalmente para que no
+            # queden columnas angostas con espacio vacio a la derecha.
+            sobrante = ancho_total_disponible - ancho_calculado
+            anchos = [a + int(sobrante * (a / ancho_calculado)) for a in anchos]
+
+        for columna, ancho in zip(columnas, anchos):
+            tabla.column(columna, width=ancho)
+
+    def agrandar_ventana_si_hace_falta(self, ancho_extra_necesario):
+        raiz = self.winfo_toplevel()
+        raiz.update_idletasks()
+        ancho_actual = raiz.winfo_width()
+        alto_actual = raiz.winfo_height()
+
+        ancho_maximo = raiz.winfo_screenwidth() - 60
+        nuevo_ancho = min(ancho_actual + ancho_extra_necesario + 20, ancho_maximo)
+
+        if nuevo_ancho > ancho_actual:
+            raiz.geometry(f"{nuevo_ancho}x{alto_actual}")
 
     def limpiar_tabla(self, tabla):
         for item in tabla.get_children():

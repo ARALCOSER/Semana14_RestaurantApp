@@ -34,5 +34,35 @@
         "nombre": "Te Helado",
         "categoria": "jugo",
         "precio": 3.5
+    },
+    {
+        "codigo": "007",
+        "nombre": "Sopa de siete granos",
+        "categoria": "sopa",
+        "precio": 9.0
+    },
+    {
+        "codigo": "008",
+        "nombre": "jugo mix de mora naranja",
+        "categoria": "jugos naturales",
+        "precio": 3.5
+    },
+    {
+        "codigo": "009",
+        "nombre": "Helado de salcedo",
+        "categoria": "helado",
+        "precio": 1.0
+    },
+    {
+        "codigo": "010",
+        "nombre": "conchas asadas",
+        "categoria": "plato fuerte",
+        "precio": 12.0
+    },
+    {
+        "codigo": "011",
+        "nombre": "parrillada para dos",
+        "categoria": "plato fuerte",
+        "precio": 32.0
     }
 ]
